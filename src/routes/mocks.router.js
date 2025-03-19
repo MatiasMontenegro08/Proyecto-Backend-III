@@ -7,8 +7,8 @@ import petModel from "../dao/models/Pet.js";
 const router = Router();
 
 // Ruta para obtener usuarios ficticios
-router.get('/mockingusers/:cantUsers', async (req, res) => {
-    const { cantUsers } = req.params;
+router.get('/mockingusers', async (req, res) => {
+    const cantUsers = req.query.cantUsers; // Cantidad de usuarios que se desean generar por query params
     const numUsers = parseInt(cantUsers, 10);
 
     if (isNaN(numUsers)) return res.status(400).send({ status: "error", message: "Invalid parameters" });
@@ -29,9 +29,9 @@ router.get('/mockingpets', async (req, res) => {
     res.send({ status: "success", payload: pets });
 });
 
-// Ruta para generar datos ficticios en la base de datos de MongoDB con la cantidad de usuarios y mascotas que se desee
-router.post('/generateData/:cantUsers/:cantPets', async (req, res) => {
-    const { cantUsers, cantPets } = req.params;
+// Ruta para generar datos ficticios en la base de datos de MongoDB con la cantidad de usuarios y mascotas que se desee por query params
+router.post('/generateData', async (req, res) => {
+    const { cantUsers, cantPets } = req.query;
 
     // parsear los parametros a numeros enteros
     const numUsers = parseInt(cantUsers, 10);
@@ -48,8 +48,12 @@ router.post('/generateData/:cantUsers/:cantPets', async (req, res) => {
         for (let i = 0; i < numPets; i++) {
             await petModel.create(await generatePets());
         }
+        
+        // mostrar los usuarios y mascotas generados
+        const users = await userModel.find();
+        const pets = await petModel.find();
 
-        res.send({ status: "success", message: "Data generated" });
+        res.send({ status: "success", message: "Data generated", payload: { users, pets } });
     } catch (error) {
         res.status(500).send({ status: "error", message: error.message});
     }

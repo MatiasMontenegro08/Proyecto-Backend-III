@@ -1,0 +1,95 @@
+# Documentación de las rutas de adopciones
+paths:
+  # Primera ruta de la documentación
+  /api/adoptions:
+    get:
+      summary: Obtiene todas las adopciones
+      tags:
+        - adoptions
+      responses:
+        '200':
+          description: Lista de adopciones cargada correctamente
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Adoption'
+        '500':
+          description: Error interno del servidor
+
+  # Segunda ruta de la documentación
+  /api/adoptions/{aid}:
+    get:
+      summary: Obtiene una adopción específica
+      tags:
+        - adoptions
+      parameters:
+        - name: aid
+          in: path
+          description: Identificador único de la adopción
+          required: true
+          schema:
+            type: String
+      responses:
+        '200':
+          description: Adopción cargada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adoption'
+        '404':
+          description: Adoption not found
+        '500':
+          description: Error interno del servidor
+
+  # Tercera ruta de la documentación
+  /api/adoptions/{uid}/{pid}:
+    post:
+      summary: Crea una nueva adopción en el sistema
+      tags:
+        - adoptions
+      parameters:
+        - name: uid
+          in: path
+          description: Identificador único del usuario
+          required: true
+          schema:
+            type: String
+        - name: pid
+          in: path
+          description: Identificador único de la mascota
+          required: true
+          schema:
+            type: String
+      responses:
+        '201':
+          description: Adopción creada correctamente
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Adoption'
+        '400':
+          description: Error incomplete values
+        '404':
+          description: Pet or user not found
+        '500':
+          description: Error interno del servidor
+          
+# Componentes de la documentación
+components:
+  schemas:
+    Adoption:
+      type: object
+      properties:
+        owner:
+          type: mongoose.Schema.Types.ObjectId
+          ref: 'User'
+          description: Identificador del Usuario que adoptó la mascota
+        pet:
+          type: mongoose.Schema.Types.ObjectId
+          ref: 'Pet'
+          description: Identificador de la mascota adoptada
+      example:
+        owner: 5f7f7b3b4b3b4b3b4b3b4b3b
+        pet: 5f7f7b3b4b3b4b3b4b3b4b3b
