@@ -1,0 +1,117 @@
+# Documentación de las rutas de la API de usuarios
+paths:
+  # Primera ruta de la documentación
+    /api/users:
+      get:
+        summary: Obtiene todos los usuarios disponibles en el sistema
+        tags:
+          - users
+        responses:
+          '200':
+            description: success
+          '500':
+            description: Error interno del servidor
+    /api/users/{uid}:
+      get:
+        summary: Obtiene la información de un usuario específico por su id
+        tags:
+          - users
+        parameters:
+          - name: uid
+            in: path
+            description: Identificador único del usuario
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: success
+          '404':
+            description: User not found
+          '500':
+            description: Error interno del servidor
+      put:
+        summary: Actualiza la información de un usuario específico por su id
+        tags:
+          - users
+        parameters:
+          - name: uid
+            in: path
+            description: Identificador único del usuario
+            required: true
+            schema:
+              type: string
+        requestBody:
+          required: true
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                first_name: Juan
+                last_name: Perez
+                email: juanperez@ejemplo.com
+                role: user
+                pets: []
+        responses:
+          '200':
+            description: success
+          '404':
+            description: User not found
+          '500':
+            description: Error interno del servidor
+      delete:
+        summary: Elimina un usuario específico por su id
+        tags:
+          - users
+        parameters:
+          - name: uid
+            in: path
+            description: Identificador único del usuario
+            required: true
+            schema:
+              type: string
+        responses:
+          '200':
+            description: success
+          '404':
+            description: User not found
+          '500':
+            description: Error interno del servidor
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        _id:
+          type: objectId
+          description: Id autogenerado de mongo
+        first_name:
+          type: string
+          description: Nombre del usuario
+        last_name:
+          type: string
+          description: Apellido del usuario
+        email:
+          type: string
+          description: Correo electrónico del usuario, este campo es único
+        password:
+          type: string
+          description: Contraseña hasheada del usuario
+        role:
+          type: string
+          description: Rol del usuario, puede ser 'admin' o 'user'
+        pets:
+          type: array
+          description: Lista de mascotas asociadas al usuario
+          items:
+            type: string
+            description: Id de la mascota
+      example:
+        _id: 5f7b3b3b4b3b3b3b3b3b3b3b
+        first_name: Juan
+        last_name: Perez
+        email: juanperez@ejemplo.com
+        password: $2a$10$
+        role: user
+        pets: [5f7b3b3b4b3b3b3b3b3b3b3b, 5f7b3b3b4b3b3b3b3b3b3b3b]
