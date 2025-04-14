@@ -38,13 +38,16 @@ Una vez que el contenedor está en ejecución, puedes acceder a la aplicación e
 http://localhost:8080
 ```
 
-## 📌 Endpoints principales (si aplica)
-| Método | Endpoint      | Descripción |
-|--------|--------------|-------------|
-| GET    | /api/recurso | Descripción |
-| POST   | /api/recurso | Descripción |
+## 📌 Endpoints principales
+Endpoint     |
+-------------|
+/api/users
+/api/pets
+/api/adoptions
+/api/sessions
+/api/mocks
 
-Para más detalles sobre los endpoints y su uso, consulta la documentación en el repositorio.
+Para más detalles sobre los endpoints y su uso, consulta la documentación: http://localhost:8080/api-docs/#/.
 
 ## 🛑 Detener y eliminar el contenedor
 Para detener el contenedor:
